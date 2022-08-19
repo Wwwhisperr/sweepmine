@@ -1,0 +1,37 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+tr,
+td {
+    border: #000 1px solid;
+}
+
+td {
+    background-color: #bbb;
+    padding: 3px;
+}
+table {
+    border: #000 1px solid;
+    table-layout: fixed;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+td div {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    line-height: 30px;
+    visibility: hidden;
+}
+
+.text {
+    width: 200px;
+    height: 50px;
+    background-color: #e5e5e5;
+    line-height: 50px;
+    text-align: center;
+    margin: 0 auto;
+    /* color: red; */
+}
