@@ -46,7 +46,7 @@
           var td = trr.querySelectorAll('td');
           td[sumarr[a][1]].id = 'x'
           var div = td[sumarr[a][1]].querySelector('div');
-          div.innerHTML = "雷";
+          div.innerHTML = "💣";
           // 注意这边的xy反了
       }
   }
@@ -150,11 +150,9 @@
               td[i].addEventListener('contextmenu', function (e) {
                   if (this.className != 'open') {
                       if (this.className != 'on') {
-                          this.style.backgroundColor = 'red';
+                          this.style.backgroundColor = '#979797';
                           this.removeEventListener('click', click);
-                          this.className = 'on'
-                      
-                   
+                          this.className = 'on'            
                       } else {
                           this.style.backgroundColor = '#bbb'
                           this.addEventListener('click', click);
@@ -181,7 +179,7 @@
       }
       // 扫雷成功判断
       if (hadopenarr.length == 90) {
-          openmine()
+          openminewin()
           text.innerHTML = "你赢啦！"
           text.style.color='green'
       }
@@ -294,10 +292,21 @@
       for (var a = 0; a < sumarr.length; a++) {
           var td = tr[sumarr[a][0]].querySelectorAll('td');
           var div = td[sumarr[a][1]].querySelector('div');
-          td[sumarr[a][1]].style.backgroundColor = 'pink';
+          td[sumarr[a][1]].style.backgroundColor = '#cc8f8f';
           div.style.visibility = 'visible';
       }
   }
+//   赢了打开雷背景颜色不一样
+var openminewin = function () {
+    var tr = tbody.querySelectorAll('tr');
+    for (var a = 0; a < sumarr.length; a++) {
+        var td = tr[sumarr[a][0]].querySelectorAll('td');
+        var div = td[sumarr[a][1]].querySelector('div');
+        td[sumarr[a][1]].style.backgroundColor = '#bbb';
+        td[sumarr[a][1]].className=''
+        div.style.visibility = 'visible';
+    }
+}
   // 创建雷盘
   createtable();
   // 随机埋雷10个
