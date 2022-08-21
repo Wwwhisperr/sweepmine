@@ -148,7 +148,6 @@ class sweepmine {
             }
         }
     }
-
     //绑定点击事件
     clickopen() {
         this.init();
@@ -163,16 +162,7 @@ class sweepmine {
         // 点到雷
         for (var a = 0; a < this.sumarr.length; a++) {
             this.td = this.tr[this.sumarr[a][0]].querySelectorAll('td');
-            this.td[that.sumarr[a][1]].addEventListener('click', function () {
-                // 打开雷
-                if (this.className != 'on') {
-                    that.openmine();
-                    that.text.innerHTML = "点到雷，输了"
-                    that.text.style.color = 'red'
-                    that.removemineclick()
-                    that.removeflag()
-                }
-            })
+            this.td[that.sumarr[a][1]].addEventListener('click', that.failmine)
         }
         // 右键插棋子
         for (var j = 0; j < this.tr.length; j++) {
@@ -182,7 +172,19 @@ class sweepmine {
             }
         }
     }
-    // 雷移除点击开盖事件
+    // 打开雷
+    failmine() {
+
+        if (this.className != 'on') {
+            that.openmine();
+            that.text.innerHTML = "点到雷，输了"
+            that.text.style.color = 'red'
+            this.style.backgroundColor = 'red';
+            that.removemineclick()
+            that.removeflag()
+        }
+    }
+    // 移除点击开盖事件
     removemineclick() {
         this.init();
         for (var i = 0; i < this.tr.length; i++) {
@@ -190,6 +192,9 @@ class sweepmine {
             for (var j = 0; j < this.td.length; j++) {
                 // 普通格子移除点击开盖事件
                 this.td[j].removeEventListener('click', that.click)
+                // 移除雷特效
+                this.td[j].removeEventListener('click', that.failmine)
+
             }
         }
     }
@@ -223,13 +228,20 @@ class sweepmine {
     }
     // 点击函数
     click() {
+
         this.div = this.querySelector('div');
+        // if (this.div.outerText == 0) {
+        //     // this.div.style.visibility = 'visible';
+        //     this.style.backgroundColor = '#e5e5e5';
+        // } else {
+        //     this.div.style.visibility = 'visible';
+        //     this.style.backgroundColor = '#e5e5e5';
+        // }
         this.div.style.visibility = 'visible';
         this.style.backgroundColor = '#e5e5e5';
-
         if (this.id != 'x' && that.hadopenarr.indexOf(this.id) == -1) {
             that.hadopenarr.push(this.id)
-            console.log(that.hadopenarr)
+
         }
         if (this.div.outerText == 0) {
             that.clickzero(this)
@@ -238,7 +250,7 @@ class sweepmine {
         let boardd = parseInt(that.board)
         let minenumm = parseInt(that.minenum)
         let winnum = (boardd * boardd) - minenumm
-        console.log(winnum);
+
         if (that.hadopenarr.length == winnum) {
             that.openminewin()
             that.text.innerHTML = "你赢啦！"
@@ -338,9 +350,18 @@ class sweepmine {
         this.td = this.tr[this.z].querySelectorAll('td')
         this.divv = this.td[this.y].querySelector('div');
         if (this.td[this.y].className != 'on' && this.td[this.y].id != 'x') {
+            // if (this.divv.outerText!=0) {
+            //     console.log(this.divv)
+            //     this.divv.style.visibility = 'visible';
+            //     this.td[this.y].style.backgroundColor = '#e5e5e5';
+            //     this.td[this.y].className = 'open'          
+            // } else {
+            //     this.td[this.y].style.backgroundColor = '#e5e5e5';
+            //     this.td[this.y].className = 'open'
+            // }
             this.divv.style.visibility = 'visible';
             this.td[this.y].style.backgroundColor = '#e5e5e5';
-            this.td[this.y].className = 'open'
+            this.td[this.y].className = 'open' 
         }
         if (that.hadopenarr.indexOf(this.td[this.y].id) == -1) {//避免递归重复计算
             that.hadopenarr.push(this.td[this.y].id)
@@ -398,7 +419,6 @@ new sweepmine(9, 10)
 let box = document.querySelector('.level')
 let btn = box.querySelectorAll('button')
 
-console.log(btn);
 function initboard() {
     var table = document.querySelector('table');
     var tbody = table.querySelector('tbody');
@@ -412,7 +432,6 @@ btn[0].addEventListener('click', function () {
     // history.go(0)
     initboard()
     new sweepmine(9, 10)
-
 
 })
 btn[1].addEventListener('click', function () {
