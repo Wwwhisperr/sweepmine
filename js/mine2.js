@@ -9,14 +9,14 @@ var text = document.querySelector('.text')
 
 
 // 创建雷盘
-var createtable = function () {
-    for (var i = 0; i < 10; i++) {
+var createtable = function (board) {
+    for (var i = 0; i < board; i++) {
         tbody.insertAdjacentHTML("beforeend", "<tr></tr>");
     }
     var tr = tbody.querySelectorAll('tr');
     for (var j = 0; j < tr.length; j++) {
         var trr = tr[j]
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < board; i++) {
             trr.insertAdjacentHTML('beforeend', '<td><div></div></td>');
             var td = trr.querySelectorAll('td');
             td[i].id = j + '' + i
@@ -24,18 +24,18 @@ var createtable = function () {
     }
 }
 // 生成雷数组
-var createminearr = function () {
-    for (var a = 0; a < 10; a++) {
-        var x = parseInt(Math.random() * 10);//转为整数
-        var y = parseInt(Math.random() * 10);
+var createminearr = function (minenum,board) {
+    for (var a = 0; a < minenum; a++) {
+        var x = parseInt(Math.random() * board);//转为整数
+        var y = parseInt(Math.random() * board);
         sumarr[a] = [x, y];
 
     }
 
 }
 // 随机插雷
-var createmine = function () {
-    createminearr();
+var createmine = function (minenum,board) {
+    createminearr(minenum,board);
     // 基础算法：找出数组中重复出现的元素
     sumarr = ifexit(sumarr)
     for (var a = 0; a < sumarr.length; a++) {
@@ -110,7 +110,7 @@ var sum = function () {
 }
 
 //绑定点击事件
-var clickopen = function () {
+var clickopen = function (board) {
     var tr = tbody.querySelectorAll('tr');
     for (var i = 0; i < tr.length; i++) {
         var td = tr[i].querySelectorAll('td');
@@ -316,9 +316,9 @@ var openminewin = function () {
     }
 }
 // 创建雷盘
-createtable();
+createtable(30);
 // 随机埋雷10个
-createmine();
+createmine(10,30);
 // 计算每一个格子周围的雷数
 sum()
 //绑定点击事件，点击开盖
