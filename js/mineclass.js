@@ -431,15 +431,18 @@ function initboard() {
 btn[0].addEventListener('click', function () {
     // history.go(0)
     initboard()
-    new sweepmine(9, 10)
+    this.one=new sweepmine(9, 10)
+    this.one=null
 
 })
 btn[1].addEventListener('click', function () {
     initboard()
-    new sweepmine(16, 40)
-
+    this.two=new sweepmine(16, 40)
+    this.two=null
 })
 btn[2].addEventListener('click', function () {
     initboard()
-    new sweepmine(22, 99)
+    this.three=new sweepmine(22, 99)
+    this.three=null
+
 })
