@@ -11,7 +11,11 @@ class sweepmine {
         this.tablearr = [];
         // 搞个数组来存已经被递归过的格子
         this.hadopenarr = []
+        // 第一个点击
         this.firstclick = []
+        // 第一个点击后的周围一圈
+        this.firstround = []
+
         this.text = document.querySelector('.text')
         // 创建雷盘
         this.createtable();
@@ -21,6 +25,7 @@ class sweepmine {
         this.sum()
         //绑定点击事件，点击开盖
         this.clickopen()
+
         // 切换难度更新下方提示
         this.inittext()
     }
@@ -92,6 +97,7 @@ class sweepmine {
     }
     // 判断雷数组是否重复并替换掉
     ifexit() {
+        // 随机生成的雷不能有相同的
         for (var i = 0; i < this.sumarr.length - 1; i++) {
             for (var j = i + 1; j < this.sumarr.length; j++) {
                 if (this.sumarr[i][0] == this.sumarr[j][0] && this.sumarr[i][1] == this.sumarr[j][1]) {
@@ -101,17 +107,23 @@ class sweepmine {
                     this.sumarr.push([this.x, this.y]);
                     this.ifexit(this.sumarr);//递归
                 }
+
             }
         }
+        
         // 不和第一击相同
-        //     for (var i = 0; i < this.sumarr.length; i++) {
-        //     if (that.firstclick[0] == this.sumarr[i][0] && that.firstclick[1] == this.sumarr[i][1]) {
-        //        console.log('hihihi');
-        //         this.sumarr.splice(i, 1)
-        //         this.x = parseInt(Math.random() * this.board);//转为整数
-        //         this.y = parseInt(Math.random() * this.board);
-        //         this.sumarr.push([this.x, this.y]);
-        //         this.ifexit(this.sumarr);//递归
+        
+            // for (var j = 0; j < that.firstround.length; j++) {
+        //         for (var i = 0; i < this.sumarr.length; i++) {
+        //         if (that.firstround[j][0] == this.sumarr[i][0] && that.firstround[j][1] == this.sumarr[i][1]) {
+        //             console.log('eeee');
+        // console.log(that.firstround);
+        //             this.sumarr.splice(i, 1)
+        //             this.x = parseInt(Math.random() * this.board);//转为整数
+        //             this.y = parseInt(Math.random() * this.board);
+        //             this.sumarr.push([this.x, this.y]);
+        //             this.ifexit(this.sumarr);//递归
+        //         }
         //     }
         // }
 
@@ -253,11 +265,30 @@ class sweepmine {
         this.div.style.visibility = 'visible';
         this.style.backgroundColor = '#e5e5e5';
 
-        // 第一击
-        // if (that.hadopenarr.length == 0) {
-        //     // console.log(this.id);
-        //     that.firstclick = this.id.split('_')
-        // }
+        if (that.hadopenarr.length == 0) {
+            // console.log(this.id);
+            that.firstclick = this.id.split('_')
+            // console.log(that.firstclick);
+            // that.firstround.push(that.firstclick)
+            // console.log([parseInt(that.firstclick[0]) + 1, parseInt(that.firstclick[1]) + 1]);
+            // 左上
+            // that.firstround.push([parseInt(that.firstclick[0]) - 1, parseInt(that.firstclick[1]) - 1])
+            // // 上
+            // that.firstround.push([parseInt(that.firstclick[0]) - 1, parseInt(that.firstclick[1])])
+            // // 右上
+            // that.firstround.push([parseInt(that.firstclick[0]) - 1, parseInt(that.firstclick[1]) + 1])
+            // // 左
+            // that.firstround.push([parseInt(that.firstclick[0]), parseInt(that.firstclick[1]) - 1])
+            // // 右
+            // that.firstround.push([parseInt(that.firstclick[0]), parseInt(that.firstclick[1]) + 1])
+            // // 左下
+            // that.firstround.push([parseInt(that.firstclick[0]) + 1, parseInt(that.firstclick[1]) - 1])
+            // // 下
+            // that.firstround.push([parseInt(that.firstclick[0]) + 1, parseInt(that.firstclick[1])])
+            // // 右下
+            // that.firstround.push([parseInt(that.firstclick[0]) + 1, parseInt(that.firstclick[1]) + 1])
+            // console.log(that.firstround);
+        }
 
         if (this.id != 'x' && that.hadopenarr.indexOf(this.id) == -1) {
             that.hadopenarr.push(this.id)
