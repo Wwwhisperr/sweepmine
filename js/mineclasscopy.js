@@ -250,9 +250,10 @@ class sweepmine {
         //     this.div.style.visibility = 'visible';
         //     this.style.backgroundColor = '#e5e5e5';
         // }
+      
         this.div.style.visibility = 'visible';
         this.style.backgroundColor = '#e5e5e5';
-
+       
         // 第一击
         // if (that.hadopenarr.length == 0) {
         //     // console.log(this.id);
@@ -264,15 +265,19 @@ class sweepmine {
 
         }
         if (this.div.outerText == 0) {
+            // console.log(this.div.outerText);
+            this.div.style.visibility = 'hidden';
+            // this.style.backgroundColor = '#e5e5e5';
             that.clickzero(this)
         }
+
         // 扫雷成功判断
         let boardd = parseInt(that.board)
         let minenumm = parseInt(that.minenum)
         let winnum = (boardd * boardd) - minenumm
 
-        if (that.hadopenarr.length == winnum) {
-            that.openminewin()
+        if (that.hadopenarr.length == winnum+1) {
+            // that.openminewin()
             that.text.innerHTML = "你赢啦！"
             that.text.style.color = 'green'
             that.removemineclick()
@@ -284,6 +289,7 @@ class sweepmine {
     clickzero(thatt) {
 
         this.div = thatt.querySelector('div')
+        this.div.style.visibility='hidden'
         this.idd = thatt.id.split('_')
         // y坐标
         let y = parseInt(this.idd[0])
@@ -297,7 +303,8 @@ class sweepmine {
         // this.board=parseInt(this.board)
         // 获取坐标
         // 左侧
-        if (this.div.outerText == 0) {
+        // if (this.div.outerText == 0) {
+            // this.div.style.visibility = 'hidden';
             if (x != 0) {
                 this.zuo = y + '_' + this.xj
                 // 上
@@ -358,7 +365,7 @@ class sweepmine {
                 }
                 that.otheropen(this.xia)
             }
-        }
+        // }
     }
     // 打开其他坐标格子
     otheropen(o) {
@@ -366,22 +373,23 @@ class sweepmine {
         this.z = parseInt(o[0])
         this.y = parseInt(o[1])
         this.init();
-
+        // console.log(this.tr[this.z]);
         this.td = this.tr[this.z].querySelectorAll('td')
+        // console.log(this.td);
         this.divv = this.td[this.y].querySelector('div');
+        
+ 
         if (this.td[this.y].className != 'on' && this.td[this.y].id != 'x') {
-            // if (this.divv.outerText!=0) {
-            //     console.log(this.divv)
-            //     this.divv.style.visibility = 'visible';
-            //     this.td[this.y].style.backgroundColor = '#e5e5e5';
-            //     this.td[this.y].className = 'open'          
-            // } else {
-            //     this.td[this.y].style.backgroundColor = '#e5e5e5';
-            //     this.td[this.y].className = 'open'
-            // }
-            this.divv.style.visibility = 'visible';
+            // console.log(this.divv.outerText);
+            this.divv.style.visibility = 'visible'; 
             this.td[this.y].style.backgroundColor = '#e5e5e5';
             this.td[this.y].className = 'open'
+            
+            if(this.divv.outerText==0){
+                this.divv.style.visibility = 'hidden'; 
+
+            }
+            
         }
         if (that.hadopenarr.indexOf(this.td[this.y].id) == -1) {//避免递归重复计算
             that.hadopenarr.push(this.td[this.y].id)
@@ -390,6 +398,7 @@ class sweepmine {
             var thisss = this.td[this.y]
             if (this.odiv.outerText == 0) {
                 // 回调函数
+                // this.odiv.style.visibility = 'hidden';
                 setTimeout(function () { that.yibu(thisss) }, 2)//异步
             }
         } else {
