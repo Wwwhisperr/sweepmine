@@ -223,7 +223,6 @@ class sweepmine {
                 this.addEventListener('click', that.click);
 
                 this.className = ''
-
             }
         }
         e.preventDefault();
@@ -243,14 +242,6 @@ class sweepmine {
     click() {
 
         this.div = this.querySelector('div');
-        // if (this.div.outerText == 0) {
-        //     // this.div.style.visibility = 'visible';
-        //     this.style.backgroundColor = '#e5e5e5';
-        // } else {
-        //     this.div.style.visibility = 'visible';
-        //     this.style.backgroundColor = '#e5e5e5';
-        // }
-      
         this.div.style.visibility = 'visible';
         this.style.backgroundColor = '#e5e5e5';
        
@@ -387,9 +378,7 @@ class sweepmine {
             
             if(this.divv.outerText==0){
                 this.divv.style.visibility = 'hidden'; 
-
-            }
-            
+            }        
         }
         if (that.hadopenarr.indexOf(this.td[this.y].id) == -1) {//避免递归重复计算
             that.hadopenarr.push(this.td[this.y].id)
@@ -438,13 +427,11 @@ class sweepmine {
 // (棋盘，雷数)
 // 初级
 new sweepmine(9, 10)
-
 // 中级
 // new sweepmine(16, 40)
 // 高级
 // new sweepmine(22, 99)
 // var mineboard=null;
-
 let box = document.querySelector('.level')
 let btn = box.querySelectorAll('button')
 
@@ -462,7 +449,6 @@ btn[0].addEventListener('click', function () {
     initboard()
     this.one = new sweepmine(9, 10)
     this.one = null
-
 })
 btn[1].addEventListener('click', function () {
     initboard()
