@@ -267,9 +267,9 @@ class sweepmine {
         let minenumm = parseInt(that.minenum)
         let winnum = (boardd * boardd) - minenumm
 
-        if (that.hadopenarr.length == winnum+1) {
+        if (that.hadopenarr.length == winnum) {
             // that.openminewin()
-            that.text.innerHTML = "你赢啦！"
+            that.text.innerHTML = "你赢啦！🎉"
             that.text.style.color = 'green'
             that.removemineclick()
             that.removeflag()
