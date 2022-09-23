@@ -190,7 +190,7 @@ class sweepmine {
 
         if (this.className != 'on') {
             that.openmine();
-            that.text.innerHTML = "点到雷，输了"
+            that.text.innerHTML = "点到雷😟输了"
             that.text.style.color = 'red'
             this.style.backgroundColor = 'red';
             that.removemineclick()
