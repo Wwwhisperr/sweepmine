@@ -221,7 +221,6 @@ class sweepmine {
             } else {
                 this.style.backgroundColor = '#bbb'
                 this.addEventListener('click', that.click);
-
                 this.className = ''
             }
         }
@@ -244,7 +243,8 @@ class sweepmine {
         this.div = this.querySelector('div');
         this.div.style.visibility = 'visible';
         this.style.backgroundColor = '#e5e5e5';
-       
+        this.className='open';
+
         // 第一击
         // if (that.hadopenarr.length == 0) {
         //     // console.log(this.id);
