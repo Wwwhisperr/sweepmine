@@ -192,7 +192,7 @@ class sweepmine {
             that.openmine();
             that.text.innerHTML = "点到雷😟输了"
             that.text.style.color = 'red'
-            this.style.backgroundColor = 'red';
+            this.style.backgroundColor = '#E37979';
             that.removemineclick()
             that.removeflag()
         }
@@ -406,7 +406,7 @@ class sweepmine {
         for (var a = 0; a < that.sumarr.length; a++) {
             this.td = this.tr[that.sumarr[a][0]].querySelectorAll('td');
             this.div = this.td[that.sumarr[a][1]].querySelector('div');
-            this.td[that.sumarr[a][1]].style.backgroundColor = '#cc8f8f';
+            this.td[that.sumarr[a][1]].style.backgroundColor = '#D2B4B4';
             this.td[that.sumarr[a][1]].className = ''
             this.div.style.visibility = 'visible';
         }
