@@ -190,9 +190,9 @@ class sweepmine {
 
         if (this.className != 'on') {
             that.openmine();
-            that.text.innerHTML = "点到雷，输了"
+            that.text.innerHTML = "点到雷😟输了"
             that.text.style.color = 'red'
-            this.style.backgroundColor = 'red';
+            this.style.backgroundColor = '#E37979';
             that.removemineclick()
             that.removeflag()
         }
@@ -221,9 +221,7 @@ class sweepmine {
             } else {
                 this.style.backgroundColor = '#bbb'
                 this.addEventListener('click', that.click);
-
                 this.className = ''
-
             }
         }
         e.preventDefault();
@@ -239,19 +237,215 @@ class sweepmine {
             }
         }
     }
+
+    otheropen2(hh){
+        hh = hh.split('_')
+        this.z = parseInt(hh[0])
+        this.y = parseInt(hh[1])
+        this.init();
+        // console.log(this.tr[this.z]);
+        this.td = this.tr[this.z].querySelectorAll('td')
+        // console.log(this.td);
+        this.divv = this.td[this.y].querySelector('div');
+        
+ 
+        if (this.td[this.y].className != 'on' && this.td[this.y].id != 'x') {
+            // console.log(this.divv.outerText);
+            this.divv.style.visibility = 'visible'; 
+            this.td[this.y].style.backgroundColor = '#e5e5e5';
+            this.td[this.y].className = 'open'
+            
+            if(this.divv.outerText==0){
+                this.divv.style.visibility = 'hidden'; 
+            }        
+        }
+    }
+    openaround(thistd){
+        let div = thistd.querySelector('div')
+        let idd = thistd.id.split('_')
+        // y坐标
+        let y = parseInt(idd[0])
+        // x坐标
+        let x = parseInt(idd[1])
+
+        let xp = x + 1
+        let yp = y + 1
+        let xj = x - 1
+        let yj = y - 1
+        let bj = parseInt(this.board) - 1;
+        // 获取坐标
+        // 左侧
+            if (x != 0) {
+                let zuo = y + '_' + xj
+                // 上
+                if (y != 0) {
+                    let zuoshang = yj + '_' + xj
+                    that.otheropen2(zuoshang)
+                }
+                // 下
+                if (y != bj) {
+                    let zuoxia = yp + '_' + xj
+                    that.otheropen2(zuoxia)
+                }
+                that.otheropen2(zuo)
+            }
+            // 右侧
+            if (x != bj) {
+
+                let you = y + '_' + xp
+                // 上
+                if (y != 0) {
+                    let youshang = yj + '_' +  xp
+                  that.otheropen2(youshang)
+                }
+                // 下
+                if (y != bj) {
+                    let youxia = yp + '_' + xp
+                   that.otheropen2(youxia)
+                }
+                that.otheropen2(you)
+            }
+            // 上侧
+            if (y != 0) {
+                let shang = yj + '_' + x
+                that.otheropen2(shang)
+            }
+            // 下侧
+            if (y != bj) {
+                let xia = yp + '_' + x
+                that.otheropen2(xia)
+            }
+
+    }
+    // 便捷打开格子
+    openeasy(thisnum,thistd){
+        // console.log(thisnum);
+        // console.log(thistd);
+        if(that.checkflagandmine(thistd)==thisnum){
+            console.log("kydk");
+            that.openaround(thistd);
+        }
+
+    }
+    // 便捷打开格子-检查周围棋子和雷是否一一对应，返回对应的条数
+    checkflagandmine(thistd) {
+        let div = thistd.querySelector('div')
+        let idd = thistd.id.split('_')
+        // y坐标
+        let y = parseInt(idd[0])
+        // x坐标
+        let x = parseInt(idd[1])
+
+        let xp = x + 1
+        let yp = y + 1
+        let xj = x - 1
+        let yj = y - 1
+        let bj = parseInt(this.board) - 1;
+        // 获取坐标
+
+        let checknum = 0;
+
+        // 左侧
+            if (x != 0) {
+                let zuo = y + '_' + xj
+                // 上
+                if (y != 0) {
+                    let zuoshang = yj + '_' + xj
+                    checknum += that.checkfunction(zuoshang)
+                }
+                // 下
+                if (y != bj) {
+                    let zuoxia = yp + '_' + xj
+                    checknum += that.checkfunction(zuoxia)
+                }
+                checknum += that.checkfunction(zuo)
+            }
+            // 右侧
+            if (x != bj) {
+
+                let you = y + '_' + xp
+                // 上
+                if (y != 0) {
+                    let youshang = yj + '_' +  xp
+                    checknum += that.checkfunction(youshang)
+                }
+                // 下
+                if (y != bj) {
+                    let youxia = yp + '_' + xp
+                    checknum += that.checkfunction(youxia)
+                }
+                checknum += that.checkfunction(you)
+            }
+            // 上侧
+            if (y != 0) {
+                let shang = yj + '_' + x
+                // // 左
+                // if (x != 0) {
+                //     let zuoshang = yj + '_' +xj
+                //     checknum += that.checkfunction(zuoshang)
+                // }
+                // 右
+                // if (x != bj) {
+                //     let youshang = yj + '_' +xp
+                //     checknum += that.checkfunction(youshang)
+                // }
+                checknum += that.checkfunction(shang)
+            }
+            // 下侧
+            if (y != bj) {
+                let xia = yp + '_' + x
+                // 左
+                // if (x != 0) {
+                //     let zuoxia = yp + '_' +xj
+                //     checknum += that.checkfunction(zuoxia)
+                // }
+                // 右
+                // if (x != bj) {
+                //     let youxia = yp + '_' +xp
+                //     checknum += that.checkfunction(youxia)
+                // }
+                checknum += that.checkfunction(xia)
+            }
+            console.log(checknum);
+          return checknum;
+    }
+
+    // 检查周围棋子和雷是否一一对应,返回值
+    checkfunction(aaa){
+        // console.log(aaa);
+        aaa = aaa.split('_')
+        this.z = parseInt(aaa[0])
+        this.y = parseInt(aaa[1])
+        this.init();
+        // console.log(this.tr[this.z]);
+        this.td = this.tr[this.z].querySelectorAll('td')
+        let tdd = this.td[this.y]
+        // console.log(tdd);
+        this.div = this.td[this.y].querySelector('div');
+        // console.log(this.td);
+        // console.log(this.div );
+       if(tdd.id=='x'&& tdd.className=='on'){
+        console.log(tdd);
+        return 1;
+       }else{
+        return 0;
+       }
+    }
+
+
+
+
+
+
     // 点击函数
     click() {
 
         this.div = this.querySelector('div');
-        // if (this.div.outerText == 0) {
-        //     // this.div.style.visibility = 'visible';
-        //     this.style.backgroundColor = '#e5e5e5';
-        // } else {
-        //     this.div.style.visibility = 'visible';
-        //     this.style.backgroundColor = '#e5e5e5';
-        // }
         this.div.style.visibility = 'visible';
         this.style.backgroundColor = '#e5e5e5';
+        this.className='open';
+
+
 
         // 第一击
         // if (that.hadopenarr.length == 0) {
@@ -264,16 +458,27 @@ class sweepmine {
 
         }
         if (this.div.outerText == 0) {
+            // console.log(this.div.outerText);
+            this.div.style.visibility = 'hidden';
+            // this.style.backgroundColor = '#e5e5e5';
             that.clickzero(this)
+        }else{
+            if(this.id !='x'&&this.className=='open'){
+                // 便捷打开格子
+                that.openeasy(this.div.outerText,this)
+            }
+        
         }
+        
+
         // 扫雷成功判断
         let boardd = parseInt(that.board)
         let minenumm = parseInt(that.minenum)
         let winnum = (boardd * boardd) - minenumm
 
         if (that.hadopenarr.length == winnum) {
-            that.openminewin()
-            that.text.innerHTML = "你赢啦！"
+            // that.openminewin()
+            that.text.innerHTML = "你赢啦！🎉"
             that.text.style.color = 'green'
             that.removemineclick()
             that.removeflag()
@@ -284,6 +489,7 @@ class sweepmine {
     clickzero(thatt) {
 
         this.div = thatt.querySelector('div')
+        this.div.style.visibility='hidden'
         this.idd = thatt.id.split('_')
         // y坐标
         let y = parseInt(this.idd[0])
@@ -297,7 +503,8 @@ class sweepmine {
         // this.board=parseInt(this.board)
         // 获取坐标
         // 左侧
-        if (this.div.outerText == 0) {
+        // if (this.div.outerText == 0) {
+            // this.div.style.visibility = 'hidden';
             if (x != 0) {
                 this.zuo = y + '_' + this.xj
                 // 上
@@ -332,33 +539,33 @@ class sweepmine {
             if (y != 0) {
                 this.shang = this.yj + '_' + x
                 // 左
-                if (x != 0) {
-                    this.zuoshang = this.yj + '_' + this.xj
-                    that.otheropen(this.zuoshang)
-                }
+                // if (x != 0) {
+                //     this.zuoshang = this.yj + '_' + this.xj
+                //     that.otheropen(this.zuoshang)
+                // }
                 // 右
-                if (x != bj) {
-                    this.youshang = this.yj + '_' + this.xp
-                    that.otheropen(this.youshang)
-                }
+                // if (x != bj) {
+                //     this.youshang = this.yj + '_' + this.xp
+                //     that.otheropen(this.youshang)
+                // }
                 that.otheropen(this.shang)
             }
             // 下侧
             if (y != bj) {
                 this.xia = this.yp + '_' + x
                 // 左
-                if (x != 0) {
-                    this.zuoxia = this.yp + '_' + this.xj
-                    that.otheropen(this.zuoxia)
-                }
+                // if (x != 0) {
+                //     this.zuoxia = this.yp + '_' + this.xj
+                //     that.otheropen(this.zuoxia)
+                // }
                 // 右
-                if (x != bj) {
-                    this.youxia = this.yp + '_' + this.xp
-                    that.otheropen(this.youxia)
-                }
+                // if (x != bj) {
+                //     this.youxia = this.yp + '_' + this.xp
+                //     that.otheropen(this.youxia)
+                // }
                 that.otheropen(this.xia)
             }
-        }
+        // }
     }
     // 打开其他坐标格子
     otheropen(o) {
@@ -366,22 +573,21 @@ class sweepmine {
         this.z = parseInt(o[0])
         this.y = parseInt(o[1])
         this.init();
-
+        // console.log(this.tr[this.z]);
         this.td = this.tr[this.z].querySelectorAll('td')
+        // console.log(this.td);
         this.divv = this.td[this.y].querySelector('div');
+        
+ 
         if (this.td[this.y].className != 'on' && this.td[this.y].id != 'x') {
-            // if (this.divv.outerText!=0) {
-            //     console.log(this.divv)
-            //     this.divv.style.visibility = 'visible';
-            //     this.td[this.y].style.backgroundColor = '#e5e5e5';
-            //     this.td[this.y].className = 'open'          
-            // } else {
-            //     this.td[this.y].style.backgroundColor = '#e5e5e5';
-            //     this.td[this.y].className = 'open'
-            // }
-            this.divv.style.visibility = 'visible';
+            // console.log(this.divv.outerText);
+            this.divv.style.visibility = 'visible'; 
             this.td[this.y].style.backgroundColor = '#e5e5e5';
             this.td[this.y].className = 'open'
+            
+            if(this.divv.outerText==0){
+                this.divv.style.visibility = 'hidden'; 
+            }        
         }
         if (that.hadopenarr.indexOf(this.td[this.y].id) == -1) {//避免递归重复计算
             that.hadopenarr.push(this.td[this.y].id)
@@ -390,6 +596,7 @@ class sweepmine {
             var thisss = this.td[this.y]
             if (this.odiv.outerText == 0) {
                 // 回调函数
+                // this.odiv.style.visibility = 'hidden';
                 setTimeout(function () { that.yibu(thisss) }, 2)//异步
             }
         } else {
@@ -408,7 +615,7 @@ class sweepmine {
         for (var a = 0; a < that.sumarr.length; a++) {
             this.td = this.tr[that.sumarr[a][0]].querySelectorAll('td');
             this.div = this.td[that.sumarr[a][1]].querySelector('div');
-            this.td[that.sumarr[a][1]].style.backgroundColor = '#cc8f8f';
+            this.td[that.sumarr[a][1]].style.backgroundColor = '#D2B4B4';
             this.td[that.sumarr[a][1]].className = ''
             this.div.style.visibility = 'visible';
         }
@@ -429,13 +636,11 @@ class sweepmine {
 // (棋盘，雷数)
 // 初级
 new sweepmine(9, 10)
-
 // 中级
 // new sweepmine(16, 40)
 // 高级
 // new sweepmine(22, 99)
 // var mineboard=null;
-
 let box = document.querySelector('.level')
 let btn = box.querySelectorAll('button')
 
@@ -453,7 +658,6 @@ btn[0].addEventListener('click', function () {
     initboard()
     this.one = new sweepmine(9, 10)
     this.one = null
-
 })
 btn[1].addEventListener('click', function () {
     initboard()
