@@ -238,28 +238,6 @@ class sweepmine {
         }
     }
 
-    otheropen2(hh){
-        hh = hh.split('_')
-        this.z = parseInt(hh[0])
-        this.y = parseInt(hh[1])
-        this.init();
-        // console.log(this.tr[this.z]);
-        this.td = this.tr[this.z].querySelectorAll('td')
-        // console.log(this.td);
-        this.divv = this.td[this.y].querySelector('div');
-        
- 
-        if (this.td[this.y].className != 'on' && this.td[this.y].id != 'x') {
-            // console.log(this.divv.outerText);
-            this.divv.style.visibility = 'visible'; 
-            this.td[this.y].style.backgroundColor = '#e5e5e5';
-            this.td[this.y].className = 'open'
-            
-            if(this.divv.outerText==0){
-                this.divv.style.visibility = 'hidden'; 
-            }        
-        }
-    }
     openaround(thistd){
         let div = thistd.querySelector('div')
         let idd = thistd.id.split('_')
@@ -280,14 +258,14 @@ class sweepmine {
                 // 上
                 if (y != 0) {
                     let zuoshang = yj + '_' + xj
-                    that.otheropen2(zuoshang)
+                    that.otheropen(zuoshang)
                 }
                 // 下
                 if (y != bj) {
                     let zuoxia = yp + '_' + xj
-                    that.otheropen2(zuoxia)
+                    that.otheropen(zuoxia)
                 }
-                that.otheropen2(zuo)
+                that.otheropen(zuo)
             }
             // 右侧
             if (x != bj) {
@@ -296,24 +274,24 @@ class sweepmine {
                 // 上
                 if (y != 0) {
                     let youshang = yj + '_' +  xp
-                  that.otheropen2(youshang)
+                  that.otheropen(youshang)
                 }
                 // 下
                 if (y != bj) {
                     let youxia = yp + '_' + xp
-                   that.otheropen2(youxia)
+                   that.otheropen(youxia)
                 }
-                that.otheropen2(you)
+                that.otheropen(you)
             }
             // 上侧
             if (y != 0) {
                 let shang = yj + '_' + x
-                that.otheropen2(shang)
+                that.otheropen(shang)
             }
             // 下侧
             if (y != bj) {
                 let xia = yp + '_' + x
-                that.otheropen2(xia)
+                that.otheropen(xia)
             }
 
     }
@@ -322,7 +300,7 @@ class sweepmine {
         // console.log(thisnum);
         // console.log(thistd);
         if(that.checkflagandmine(thistd)==thisnum){
-            console.log("kydk");
+            // console.log("kydk");
             that.openaround(thistd);
         }
 
@@ -406,7 +384,7 @@ class sweepmine {
                 // }
                 checknum += that.checkfunction(xia)
             }
-            console.log(checknum);
+            // console.log(checknum);
           return checknum;
     }
 
@@ -425,7 +403,7 @@ class sweepmine {
         // console.log(this.td);
         // console.log(this.div );
        if(tdd.id=='x'&& tdd.className=='on'){
-        console.log(tdd);
+        // console.log(tdd);
         return 1;
        }else{
         return 0;
@@ -445,7 +423,7 @@ class sweepmine {
         this.style.backgroundColor = '#e5e5e5';
         this.className='open';
 
-
+        
 
         // 第一击
         // if (that.hadopenarr.length == 0) {
@@ -457,19 +435,20 @@ class sweepmine {
             that.hadopenarr.push(this.id)
 
         }
+        if(this.id !='x'&&this.className=='open'&&this.div.outerText != 0){
+            // 便捷打开格子
+            that.openeasy(this.div.outerText,this)
+        }
+    
         if (this.div.outerText == 0) {
             // console.log(this.div.outerText);
             this.div.style.visibility = 'hidden';
             // this.style.backgroundColor = '#e5e5e5';
             that.clickzero(this)
         }else{
-            if(this.id !='x'&&this.className=='open'){
-                // 便捷打开格子
-                that.openeasy(this.div.outerText,this)
-            }
+           
         
         }
-        
 
         // 扫雷成功判断
         let boardd = parseInt(that.board)
@@ -574,34 +553,37 @@ class sweepmine {
         this.y = parseInt(o[1])
         this.init();
         // console.log(this.tr[this.z]);
-        this.td = this.tr[this.z].querySelectorAll('td')
+        let tdlist = this.tr[this.z].querySelectorAll('td')
+        // console.log(tdlist);
+        let td = tdlist[this.y]
         // console.log(this.td);
-        this.divv = this.td[this.y].querySelector('div');
+        let div = td.querySelector('div');
         
  
-        if (this.td[this.y].className != 'on' && this.td[this.y].id != 'x') {
+        if (td.className != 'on' && td.id != 'x') {
             // console.log(this.divv.outerText);
-            this.divv.style.visibility = 'visible'; 
-            this.td[this.y].style.backgroundColor = '#e5e5e5';
-            this.td[this.y].className = 'open'
+            div.style.visibility = 'visible'; 
+            td.style.backgroundColor = '#e5e5e5';
+            td.className = 'open'
             
-            if(this.divv.outerText==0){
-                this.divv.style.visibility = 'hidden'; 
-            }        
+            if(div.outerText==0){
+                div.style.visibility = 'hidden'; 
+            }    
+            if (that.hadopenarr.indexOf(td.id) == -1) {//避免递归重复计算
+                that.hadopenarr.push(td.id)
+                // console.log(that.hadopenarr.length);
+                let odiv = td.querySelector('div')
+                var thisss = td
+                if (odiv.outerText == 0) {
+                    // 回调函数
+                    // this.odiv.style.visibility = 'hidden';
+                    setTimeout(function () { that.yibu(thisss) }, 2)//异步
+                }
+            } else {
+                return;
+            }    
         }
-        if (that.hadopenarr.indexOf(this.td[this.y].id) == -1) {//避免递归重复计算
-            that.hadopenarr.push(this.td[this.y].id)
-
-            this.odiv = this.td[this.y].querySelector('div')
-            var thisss = this.td[this.y]
-            if (this.odiv.outerText == 0) {
-                // 回调函数
-                // this.odiv.style.visibility = 'hidden';
-                setTimeout(function () { that.yibu(thisss) }, 2)//异步
-            }
-        } else {
-            return;
-        }
+     
 
     }
     // 异步调用的clickzero()
