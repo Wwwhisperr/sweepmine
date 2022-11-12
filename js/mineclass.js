@@ -10,16 +10,21 @@ class sweepmine {
         this.changetext=this.changepart.querySelector('span');
         this.table = document.querySelector('table');
         this.tbody = this.table.querySelector('tbody');
+        // 雷数组
         this.sumarr = [];
         this.tablearr = [];
         // 搞个数组来存已经被递归过的格子
         this.hadopenarr = []
         this.firstclick = []
+        // 第一击
+        // this.firstclickm;
         this.text = document.querySelector('.text')
         // 切换功能的boolean
         this.changeemoji=true
         // 创建雷盘
         this.createtable();
+        // 第一次点击可能要单独处理
+        // this.firstclickfunction()
         // 随机埋雷
         this.createmine();
         // 计算每一个格子周围的雷数
@@ -75,20 +80,29 @@ class sweepmine {
                 // 移除普通格子移除点击开盖事件
                     that.td[i].removeEventListener('click', that.click)
                     // 便携恢复
-                    // that.td[i].addEventListener('click', function(){
+                    that.td[i].addEventListener('click', function(){
 
-                    //     let div=this.querySelector('div')
-                    //     if(this.id !='x'&&this.className=='open'&& div.outerText != 0){
-                    //         // 便捷打开格子
-                    //         that.openeasy(div.outerText,this)
-                    //     }
-                    // });
-                    // // 判断扫雷成功
-                    // that.win()
+                        let div=this.querySelector('div')
+                        if(this.id !='x'&&this.className=='open'&& div.outerText != 0){
+                            // 便捷打开格子
+                            that.openeasy(div.outerText,this)
+                        }
+                    });
+                    // 弥补左键插旗遗失的click功能
+                    that.td[i].addEventListener('click', that.clickflagfunction)
                     }
                 }
              
         }
+    }
+    // 弥补左键插旗遗失的click功能
+    clickflagfunction() {
+        
+        if (this.id != 'x' && that.hadopenarr.indexOf(this.id) == -1) {
+            that.hadopenarr.push(this.id)
+        }
+        that.win()    
+
     }
     // 更新tr
     init() {
@@ -180,7 +194,7 @@ class sweepmine {
         // 不和第一击相同
         //     for (let i = 0; i < this.sumarr.length; i++) {
         //     if (that.firstclick[0] == this.sumarr[i][0] && that.firstclick[1] == this.sumarr[i][1]) {
-        //        console.log('hihihi');
+        
         //         this.sumarr.splice(i, 1)
         //         this.x = parseInt(Math.random() * this.board);//转为整数
         //         this.y = parseInt(Math.random() * this.board);
@@ -240,7 +254,7 @@ class sweepmine {
             that.removemineclick()
             that.openmine();
             that.changebtn.removeEventListener('click',that.changefunction)
-            that.text.innerHTML = "点到雷😟输了"
+            that.text.innerHTML = "😟输了"
             that.text.style.color = 'red'
             thistd.style.backgroundColor = '#E37979';       
             that.removeflag()
@@ -353,13 +367,34 @@ class sweepmine {
     }
     // 便捷打开格子
     openeasy(thisnum,thistd){
-        if(that.checkflagandmine(thistd)==thisnum){
-            that.clickzero(thistd);
+        // 旗子和数字一样，可以判断
+        if(that.checkflagandnum(thistd)[0]==thisnum){
+            if(that.checkflagandnum(thistd)[1].length==0){
+                that.clickzero(thistd);
+            }else{
+            // 雷上没插旗子的数组不是空的，直接爆雷
+            let falsetd=that.checkflagandnum(thistd)[1]
+            for(let i=0;i<that.sumarr.length;i++){
+                console.log(that.sumarr[i][0],that.sumarr[i][1],parseInt(falsetd[0][0]),parseInt(falsetd[0][1]));
+                
+                if(that.sumarr[i][0]==parseInt(falsetd[0][0])&&that.sumarr[i][1]==parseInt(falsetd[0][1])){
+                    let tr=that.tbody.querySelectorAll('tr')            
+                    let tdlist=tr[that.sumarr[i][0]]
+                    let td=tdlist.querySelectorAll('td')
+                    let thismytd=td[that.sumarr[i][1]]
+                    
+                    console.log(thismytd);
+                    //需要爆雷
+                    that.failmine(thismytd)
+                }
+            }
+            }
         }
 
     }
-    // 便捷打开格子-检查周围棋子和雷是否一一对应，返回对应的条数
-    checkflagandmine(thistd) {
+    // 便捷打开格子-检查周围棋子和雷(错误扫雷逻辑，后续修改)是否一一对应，返回对应的条数
+    // 便捷打开格子-检查周围棋子和数字是否一一对应，返回对应的条数和是否插旗错误（）
+    checkflagandnum(thistd) {
         let div = thistd.querySelector('div')
         let idd = thistd.id.split('_')
         // y坐标
@@ -373,8 +408,9 @@ class sweepmine {
         let yj = y - 1
         let bj = parseInt(this.board) - 1;
         // 获取坐标
-
         let checknum = 0;
+        // 雷上没插旗子的数组
+        let arr=[]
 
         // 左侧
             if (x != 0) {
@@ -382,14 +418,23 @@ class sweepmine {
                 // 上
                 if (y != 0) {
                     let zuoshang = yj + '_' + xj
-                    checknum += that.checkfunction(zuoshang)
+                    checknum += that.checkfunction(zuoshang)[0]
+                    if(that.checkfunction(zuoshang)[1]!=0){
+                        arr.push(that.checkfunction(zuoshang)[1])
+                    }
                 }
                 // 下
                 if (y != bj) {
                     let zuoxia = yp + '_' + xj
-                    checknum += that.checkfunction(zuoxia)
+                    checknum += that.checkfunction(zuoxia)[0]
+                    if(that.checkfunction(zuoxia)[1]!=0){
+                        arr.push(that.checkfunction(zuoxia)[1])
+                    }
                 }
-                checknum += that.checkfunction(zuo)
+                checknum += that.checkfunction(zuo)[0]
+                if(that.checkfunction(zuo)[1]!=0){
+                    arr.push(that.checkfunction(zuo)[1])
+                }
             }
             // 右侧
             if (x != bj) {
@@ -398,88 +443,112 @@ class sweepmine {
                 // 上
                 if (y != 0) {
                     let youshang = yj + '_' +  xp
-                    checknum += that.checkfunction(youshang)
+                    checknum += that.checkfunction(youshang)[0]
+                    if(that.checkfunction(youshang)[1]!=0){
+                        arr.push(that.checkfunction(youshang)[1])
+                    }
                 }
                 // 下
                 if (y != bj) {
                     let youxia = yp + '_' + xp
-                    checknum += that.checkfunction(youxia)
+                    checknum += that.checkfunction(youxia)[0]
+                    if(that.checkfunction(youxia)[1]!=0){
+                        arr.push(that.checkfunction(youxia)[1])
+                    }
                 }
-                checknum += that.checkfunction(you)
+                checknum += that.checkfunction(you)[0]
+                if(that.checkfunction(you)[1]!=0){
+                    arr.push(that.checkfunction(you)[1])
+                }
             }
             // 上侧
             if (y != 0) {
                 let shang = yj + '_' + x
-                checknum += that.checkfunction(shang)
+                checknum += that.checkfunction(shang)[0]
+                if(that.checkfunction(shang)[1]!=0){
+                    arr.push(that.checkfunction(shang)[1])
+                }
             }
             // 下侧
             if (y != bj) {
                 let xia = yp + '_' + x
-                checknum += that.checkfunction(xia)
+                checknum += that.checkfunction(xia)[0]
+                if(that.checkfunction(xia)[1]!=0){
+                    arr.push(that.checkfunction(xia)[1])
+                }
             }
-          return checknum;
+          return [checknum,arr];
     }
 
-    // 检查周围棋子和雷是否一一对应,返回值
+    // 检查周围棋子和雷（错误）是否一一对应,返回值
+    // 检查周围棋子和点击格子数字是否一一对应,返回值，并返回是否差错旗子（插在数字上或者雷没有插旗子）
+    // 返回数组
     checkfunction(aaa){
-        // console.log(aaa);
+
         aaa = aaa.split('_')
         this.z = parseInt(aaa[0])
         this.y = parseInt(aaa[1])
         this.init();
-        // console.log(this.tr[this.z]);
+   
+        // 要返回的数组[旗子和雷成功对应返回1,是雷但没插旗子返回1] 否则返回0
+        let arr=[]
         this.td = this.tr[this.z].querySelectorAll('td')
         let tdd = this.td[this.y]
-        // console.log(tdd);
-        this.div = this.td[this.y].querySelector('div');
-        // console.log(this.td);
-        // console.log(this.div );
-       if(tdd.id=='x'&& tdd.className=='on'){
-        // console.log(tdd);
-        return 1;
-       }else{
-        return 0;
-       }
+     
+        this.div = this.td[this.y].querySelector('div');  
+        // 是雷但没插旗子
+        if(tdd.id=='x'&& tdd.className!='on'){
+            arr[1]=aaa   
+           }else {
+            arr[1]=0
+           }
+           // 计算旗子的数量
+        if(tdd.className=='on'){
+            arr[0]=1
+           }else{
+            arr[0]=0
+           }
+           return arr
     }
     // 点击函数
     click() {
         
+        if (this.id != 'x' && that.hadopenarr.indexOf(this.id) == -1) {
+            that.hadopenarr.push(this.id)
+
+        }
         if(this.className!='on'){
         this.div = this.querySelector('div');
         this.div.style.visibility = 'visible';
         this.style.backgroundColor = '#e5e5e5';
         this.className='open';
         }
-
+        // if(that.hadopenarr.length==0){
+        //     //第一击
+        //     this.firstclick=this.id
+        // }
         
         if(this.id=='x'&&this.className!='on'){
             that.failmine(this)
         }
         // 第一击
         // if (that.hadopenarr.length == 0) {
-        //     // console.log(this.id);
+  
         //     that.firstclick = this.id.split('_')
         // }
-        if (this.id != 'x' && that.hadopenarr.indexOf(this.id) == -1) {
-            that.hadopenarr.push(this.id)
-
-        }
+        
         if(this.id !='x'&&this.className=='open'&& this.div.outerText != 0){
             // 便捷打开格子
             that.openeasy(this.div.outerText,this)
         }
     
         if (this.div.outerText == 0) {
-            // console.log(this.div.outerText);
+
             this.div.style.visibility = 'hidden';
             // this.style.backgroundColor = '#e5e5e5';
             that.clickzero(this)
-        }else{
-           
-        
         }
-        that.win()
-       
+        that.win()    
 
     }
     win(){
@@ -503,16 +572,16 @@ class sweepmine {
         this.z = parseInt(o[0])
         this.y = parseInt(o[1])
         this.init();
-        // console.log(this.tr[this.z]);
+
         let tdlist = this.tr[this.z].querySelectorAll('td')
-        // console.log(tdlist);
+   
         let td = tdlist[this.y]
-        // console.log(this.td);
+
         let div = td.querySelector('div');
         
  
         if (td.className != 'on' && td.id != 'x') {
-            // console.log(this.divv.outerText);
+     
             div.style.visibility = 'visible'; 
             td.style.backgroundColor = '#e5e5e5';
             td.className = 'open'
@@ -522,7 +591,7 @@ class sweepmine {
             }    
             if (that.hadopenarr.indexOf(td.id) == -1) {//避免递归重复计算
                 that.hadopenarr.push(td.id)
-                // console.log(that.hadopenarr.length);
+               
                 let odiv = td.querySelector('div')
                 let thisss = td
                 if (odiv.outerText == 0) {
