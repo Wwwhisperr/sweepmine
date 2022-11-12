@@ -271,6 +271,10 @@ class sweepmine {
                 this.td[j].removeEventListener('click', that.click)
                 // 移除雷特效
                 this.td[j].removeEventListener('click', that.failmine)
+                // 移除左键插旗为了方便加上的clickflagfunction
+                this.td[j].removeEventListener('click', that.clickflagfunction)
+                // 移除左键插棋子
+                this.td[j].removeEventListener('click', that.flag)
 
             }
         }
@@ -561,9 +565,9 @@ class sweepmine {
                     // that.openminewin()
                     that.text.innerHTML = "你赢啦！🎉"
                     that.text.style.color = 'green'
+                    that.changebtn.removeEventListener('click',that.changefunction)
                     that.removemineclick()
                     that.removeflag()
-                    that.changebtn.removeEventListener('click',that.changefunction)
                 }
     }
     // 打开其他坐标格子
