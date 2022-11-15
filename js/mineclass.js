@@ -1,12 +1,12 @@
 let that;
 class sweepmine {
-  constructor(col,row,minenum) {
+  constructor(col, row, minenum) {
     that = this;
     // this.board = board;
     // 纵向
-    this.col=col
+    this.col = col;
     // 横向
-    this.row=row
+    this.row = row;
 
     this.minenum = minenum;
     // 全局
@@ -440,7 +440,7 @@ class sweepmine {
     let xj = x - 1;
     let yj = y - 1;
     let youj = parseInt(this.row) - 1;
-    let xiaj =parseInt(this.col)-1
+    let xiaj = parseInt(this.col) - 1;
     // 获取坐标
     let checknum = 0;
     // 左侧
@@ -524,7 +524,7 @@ class sweepmine {
     let xj = x - 1;
     let yj = y - 1;
     let xiaj = parseInt(this.col) - 1;
-    let youj = parseInt(this.row)-1
+    let youj = parseInt(this.row) - 1;
     // 获取坐标
     let checknum = 0;
     // 雷上没插旗子的数组
@@ -666,8 +666,8 @@ class sweepmine {
     // 扫雷成功判断
     let row = parseInt(that.row);
     let col = parseInt(that.col);
-    let minenum = parseInt(that.minenum)
-    let winnum = (row * col) - minenum;
+    let minenum = parseInt(that.minenum);
+    let winnum = row * col - minenum;
 
     if (that.hadopenarr.length == winnum) {
       // that.openminewin()
@@ -686,13 +686,9 @@ class sweepmine {
     this.z = parseInt(o[0]);
     this.y = parseInt(o[1]);
     this.init();
-
     let tdlist = this.tr[this.z].querySelectorAll("td");
-
     let td = tdlist[this.y];
-
     let div = td.querySelector("div");
-
     if (td.className != "on" && td.id != "x") {
       div.style.visibility = "visible";
       td.style.backgroundColor = "#e5e5e5";
@@ -749,11 +745,8 @@ class sweepmine {
 }
 // (棋盘竖col，棋盘横row，雷数)
 // 初级
-new sweepmine(10,9,10);
-// 中级
-// new sweepmine(16, 40)
-// 高级
-// new sweepmine(22, 99)
+new sweepmine(10, 9, 10);
+
 let box = document.querySelector(".level");
 let btn = box.querySelectorAll("button");
 
@@ -771,20 +764,20 @@ btn[0].addEventListener("click", function () {
   that.endtimer();
   initboard();
   that.changetext.innerHTML = "👆🏻";
-  this.one = new sweepmine(10,9,10);
+  this.one = new sweepmine(10, 9, 10);
   this.one = null;
 });
 btn[1].addEventListener("click", function () {
   that.endtimer();
   initboard();
   that.changetext.innerHTML = "👆🏻";
-  this.two = new sweepmine(14,20,40);
+  this.two = new sweepmine(14, 20, 40);
   this.two = null;
 });
 btn[2].addEventListener("click", function () {
   that.endtimer();
   initboard();
   that.changetext.innerHTML = "👆🏻";
-  this.three = new sweepmine(20,35,99);
+  this.three = new sweepmine(20, 35, 99);
   this.three = null;
 });
