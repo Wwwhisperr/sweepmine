@@ -1,13 +1,8 @@
 let that;
 class sweepmine {
-  constructor(col,row,minenum) {
+  constructor(board, minenum) {
     that = this;
-    // this.board = board;
-    // 纵向
-    this.col=col
-    // 横向
-    this.row=row
-
+    this.board = board;
     this.minenum = minenum;
     // 全局
     this.changepart = document.querySelector(".changemouse");
@@ -74,6 +69,8 @@ class sweepmine {
   }
   // 计时器逻辑
   timerfunction() {
+    // this.second=parseInt(this.second);
+
     let second = "";
     let hour = "";
     let minute = "";
@@ -187,15 +184,14 @@ class sweepmine {
   // 创建雷盘
   createtable() {
     this.timer.style.color = "black";
-    console.log(this.col);
-    for (let i = 0; i < this.col; i++) {
+    for (let i = 0; i < this.board; i++) {
       this.tbody.insertAdjacentHTML("beforeend", "<tr></tr>");
     }
     this.init();
     // this.tr = this.tbody.querySelectorAll('tr');
     for (let j = 0; j < this.tr.length; j++) {
       this.trr = this.tr[j];
-      for (let i = 0; i < this.row; i++) {
+      for (let i = 0; i < this.board; i++) {
         this.trr.insertAdjacentHTML("beforeend", "<td><div></div></td>");
         this.td = this.trr.querySelectorAll("td");
         this.td[i].id = j + "_" + i;
@@ -205,9 +201,8 @@ class sweepmine {
   // 生成雷数组
   createminearr() {
     for (let a = 0; a < this.minenum; a++) {
-      let x = parseInt(Math.random() * this.col); //转为整数
-      let y = parseInt(Math.random() * this.row);
-      console.log(x);
+      let x = parseInt(Math.random() * this.board); //转为整数
+      let y = parseInt(Math.random() * this.board);
       this.sumarr[a] = [x, y];
     }
   }
@@ -239,7 +234,7 @@ class sweepmine {
   }
   // 随机插雷
   createmine() {
-    that.createminearr();
+    this.createminearr();
     // 基础算法：找出数组中重复出现的元素
     this.sumarr = this.ifexit(this.sumarr);
     for (let a = 0; a < this.sumarr.length; a++) {
@@ -264,8 +259,8 @@ class sweepmine {
           this.sumarr[i][1] == this.sumarr[j][1]
         ) {
           this.sumarr.splice(j, 1);
-          this.x = parseInt(Math.random() * this.col); //转为整数
-          this.y = parseInt(Math.random() * this.row);
+          this.x = parseInt(Math.random() * this.board); //转为整数
+          this.y = parseInt(Math.random() * this.board);
           this.sumarr.push([this.x, this.y]);
           this.ifexit(this.sumarr); //递归
         }
@@ -305,8 +300,8 @@ class sweepmine {
           myfirstclick1 + 1 == this.sumarr[i][1])
       ) {
         this.sumarr.splice(i, 1);
-        this.x = parseInt(Math.random() * this.col); //转为整数
-        this.y = parseInt(Math.random() * this.row);
+        this.x = parseInt(Math.random() * this.board); //转为整数
+        this.y = parseInt(Math.random() * this.board);
         this.sumarr.push([this.x, this.y]);
         this.ifexit(this.sumarr); //递归
       }
@@ -439,8 +434,7 @@ class sweepmine {
     let yp = y + 1;
     let xj = x - 1;
     let yj = y - 1;
-    let youj = parseInt(this.row) - 1;
-    let xiaj =parseInt(this.col)-1
+    let bj = parseInt(this.board) - 1;
     // 获取坐标
     let checknum = 0;
     // 左侧
@@ -452,14 +446,14 @@ class sweepmine {
         that.otheropen(zuoshang);
       }
       // 下
-      if (y != xiaj) {
+      if (y != bj) {
         let zuoxia = yp + "_" + xj;
         that.otheropen(zuoxia);
       }
       that.otheropen(zuo);
     }
     // 右侧
-    if (x != youj) {
+    if (x != bj) {
       let you = y + "_" + xp;
       // 上
       if (y != 0) {
@@ -467,7 +461,7 @@ class sweepmine {
         that.otheropen(youshang);
       }
       // 下
-      if (y != xiaj) {
+      if (y != bj) {
         let youxia = yp + "_" + xp;
         that.otheropen(youxia);
       }
@@ -479,7 +473,7 @@ class sweepmine {
       that.otheropen(shang);
     }
     // 下侧
-    if (y != xiaj) {
+    if (y != bj) {
       let xia = yp + "_" + x;
       that.otheropen(xia);
     }
@@ -523,8 +517,7 @@ class sweepmine {
     let yp = y + 1;
     let xj = x - 1;
     let yj = y - 1;
-    let xiaj = parseInt(this.col) - 1;
-    let youj = parseInt(this.row)-1
+    let bj = parseInt(this.board) - 1;
     // 获取坐标
     let checknum = 0;
     // 雷上没插旗子的数组
@@ -542,7 +535,7 @@ class sweepmine {
         }
       }
       // 下
-      if (y != xiaj) {
+      if (y != bj) {
         let zuoxia = yp + "_" + xj;
         checknum += that.checkfunction(zuoxia)[0];
         if (that.checkfunction(zuoxia)[1] != 0) {
@@ -555,7 +548,7 @@ class sweepmine {
       }
     }
     // 右侧
-    if (x != youj) {
+    if (x != bj) {
       let you = y + "_" + xp;
       // 上
       if (y != 0) {
@@ -566,7 +559,7 @@ class sweepmine {
         }
       }
       // 下
-      if (y != xiaj) {
+      if (y != bj) {
         let youxia = yp + "_" + xp;
         checknum += that.checkfunction(youxia)[0];
         if (that.checkfunction(youxia)[1] != 0) {
@@ -587,7 +580,7 @@ class sweepmine {
       }
     }
     // 下侧
-    if (y != xiaj) {
+    if (y != bj) {
       let xia = yp + "_" + x;
       checknum += that.checkfunction(xia)[0];
       if (that.checkfunction(xia)[1] != 0) {
@@ -664,10 +657,9 @@ class sweepmine {
   }
   win() {
     // 扫雷成功判断
-    let row = parseInt(that.row);
-    let col = parseInt(that.col);
-    let minenum = parseInt(that.minenum)
-    let winnum = (row * col) - minenum;
+    let boardd = parseInt(that.board);
+    let minenumm = parseInt(that.minenum);
+    let winnum = boardd * boardd - minenumm;
 
     if (that.hadopenarr.length == winnum) {
       // that.openminewin()
@@ -747,13 +739,14 @@ class sweepmine {
     }
   }
 }
-// (棋盘竖col，棋盘横row，雷数)
+// (棋盘，雷数)
 // 初级
-new sweepmine(10,9,10);
+new sweepmine(9, 10);
 // 中级
 // new sweepmine(16, 40)
 // 高级
 // new sweepmine(22, 99)
+// let mineboard=null;
 let box = document.querySelector(".level");
 let btn = box.querySelectorAll("button");
 
@@ -771,20 +764,20 @@ btn[0].addEventListener("click", function () {
   that.endtimer();
   initboard();
   that.changetext.innerHTML = "👆🏻";
-  this.one = new sweepmine(10,9,10);
+  this.one = new sweepmine(9, 10);
   this.one = null;
 });
 btn[1].addEventListener("click", function () {
   that.endtimer();
   initboard();
   that.changetext.innerHTML = "👆🏻";
-  this.two = new sweepmine(14,20,40);
+  this.two = new sweepmine(16, 40);
   this.two = null;
 });
 btn[2].addEventListener("click", function () {
   that.endtimer();
   initboard();
   that.changetext.innerHTML = "👆🏻";
-  this.three = new sweepmine(20,35,99);
+  this.three = new sweepmine(22, 99);
   this.three = null;
 });
