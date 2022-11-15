@@ -11,6 +11,7 @@ class sweepmine {
     this.table = document.querySelector("table");
     this.tbody = this.table.querySelector("tbody");
     this.text = document.querySelector(".text");
+
     // 计时器
     this.timer = document.querySelector(".timer");
     this.nowtime = "";
@@ -24,18 +25,18 @@ class sweepmine {
     // 是否输赢 0是输 1是赢
     this.gamewinorlost = 2;
     // 第一击
-    // this.firstclickm;
+    this.myfirstclick = [];
 
     // 切换功能的boolean
     this.changeemoji = true;
     // 创建雷盘
     this.createtable();
-    // 第一次点击可能要单独处理
-    // this.firstclickfunction()
-    // 随机埋雷
-    this.createmine();
-    // 计算每一个格子周围的雷数
-    this.sum();
+
+    // // 随机埋雷
+    // this.createmine();
+    // // 计算每一个格子周围的雷数
+    // this.sum();
+
     //绑定点击事件，点击开盖
     this.clickopen();
     // 切换难度更新下方提示
@@ -183,6 +184,7 @@ class sweepmine {
   }
   // 创建雷盘
   createtable() {
+    this.timer.style.color = "black";
     for (let i = 0; i < this.board; i++) {
       this.tbody.insertAdjacentHTML("beforeend", "<tr></tr>");
     }
@@ -266,16 +268,20 @@ class sweepmine {
       }
     }
     // 不和第一击相同
-    //     for (let i = 0; i < this.sumarr.length; i++) {
-    //     if (that.firstclick[0] == this.sumarr[i][0] && that.firstclick[1] == this.sumarr[i][1]) {
 
-    //         this.sumarr.splice(i, 1)
-    //         this.x = parseInt(Math.random() * this.board);//转为整数
-    //         this.y = parseInt(Math.random() * this.board);
-    //         this.sumarr.push([this.x, this.y]);
-    //         this.ifexit(this.sumarr);//递归
-    //     }
-    // }
+    for (let i = 0; i < this.sumarr.length; i++) {
+      if (
+        parseInt(that.myfirstclick[0]) == this.sumarr[i][0] &&
+        parseInt(that.myfirstclick[1]) == this.sumarr[i][1]
+      ) {
+        // console.log("我改了");
+        this.sumarr.splice(i, 1);
+        this.x = parseInt(Math.random() * this.board); //转为整数
+        this.y = parseInt(Math.random() * this.board);
+        this.sumarr.push([this.x, this.y]);
+        this.ifexit(this.sumarr); //递归
+      }
+    }
 
     return this.sumarr;
   }
@@ -336,6 +342,7 @@ class sweepmine {
       that.openmine();
       that.changebtn.removeEventListener("click", that.changefunction);
       that.text.innerHTML = "😟输了";
+      that.timer.style.color = "red";
       that.text.style.color = "red";
       thistd.style.backgroundColor = "#E37979";
       that.removeflag();
@@ -457,13 +464,6 @@ class sweepmine {
         // 雷上没插旗子的数组不是空的，直接爆雷
         let falsetd = that.checkflagandnum(thistd)[1];
         for (let i = 0; i < that.sumarr.length; i++) {
-          console.log(
-            that.sumarr[i][0],
-            that.sumarr[i][1],
-            parseInt(falsetd[0][0]),
-            parseInt(falsetd[0][1])
-          );
-
           if (
             that.sumarr[i][0] == parseInt(falsetd[0][0]) &&
             that.sumarr[i][1] == parseInt(falsetd[0][1])
@@ -472,8 +472,6 @@ class sweepmine {
             let tdlist = tr[that.sumarr[i][0]];
             let td = tdlist.querySelectorAll("td");
             let thismytd = td[that.sumarr[i][1]];
-
-            console.log(thismytd);
             //需要爆雷
             that.failmine(thismytd);
           }
@@ -608,20 +606,20 @@ class sweepmine {
       this.style.backgroundColor = "#e5e5e5";
       this.className = "open";
     }
-    // if(that.hadopenarr.length==0){
-    //     //第一击
-    //     this.firstclick=this.id
-    // }
+
+    if (that.hadopenarr.length == 1) {
+      //第一击
+      that.myfirstclick = this.id.split("_");
+
+      // 随机埋雷
+      that.createmine();
+      // 计算每一个格子周围的雷数
+      that.sum();
+    }
 
     if (this.id == "x" && this.className != "on") {
       that.failmine(this);
     }
-    // 第一击
-    // if (that.hadopenarr.length == 0) {
-
-    //     that.firstclick = this.id.split('_')
-    // }
-
     if (this.id != "x" && this.className == "open" && this.div.outerText != 0) {
       // 便捷打开格子
       that.openeasy(this.div.outerText, this);
@@ -644,6 +642,7 @@ class sweepmine {
       // that.openminewin()
       that.text.innerHTML = "你赢啦！🎉";
       that.text.style.color = "green";
+      that.timer.style.color = "green";
       that.changebtn.removeEventListener("click", that.changefunction);
       that.removemineclick();
       that.removeflag();
