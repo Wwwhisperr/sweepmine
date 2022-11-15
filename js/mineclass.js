@@ -24,9 +24,8 @@ class sweepmine {
     this.firstclick = [];
     // 是否输赢 0是输 1是赢
     this.gamewinorlost = 2;
-    // 第一击
+    // 第一击[从上到下0-n,从左到右0-n]
     this.myfirstclick = [];
-
     // 切换功能的boolean
     this.changeemoji = true;
     // 创建雷盘
@@ -251,7 +250,7 @@ class sweepmine {
       // 注意这边的xy反了
     }
   }
-  // 判断雷数组是否重复并替换掉
+  // 处理雷数组奇奇怪怪的问题：判断雷数组是否重复(或第一击中)并替换掉
   ifexit() {
     for (let i = 0; i < this.sumarr.length - 1; i++) {
       for (let j = i + 1; j < this.sumarr.length; j++) {
@@ -267,14 +266,39 @@ class sweepmine {
         }
       }
     }
+    let myfirstclick0 = parseInt(that.myfirstclick[0]);
+    let myfirstclick1 = parseInt(that.myfirstclick[1]);
     // 不和第一击相同
-
     for (let i = 0; i < this.sumarr.length; i++) {
       if (
-        parseInt(that.myfirstclick[0]) == this.sumarr[i][0] &&
-        parseInt(that.myfirstclick[1]) == this.sumarr[i][1]
+        // 本
+        (myfirstclick0 == this.sumarr[i][0] &&
+          myfirstclick1 == this.sumarr[i][1]) ||
+        // 左上
+        (myfirstclick0 - 1 == this.sumarr[i][0] &&
+          myfirstclick1 - 1 == this.sumarr[i][1]) ||
+        // 上
+        (myfirstclick0 - 1 == this.sumarr[i][0] &&
+          myfirstclick1 == this.sumarr[i][1]) ||
+        // 右上
+        (myfirstclick0 - 1 == this.sumarr[i][0] &&
+          myfirstclick1 + 1 == this.sumarr[i][1]) ||
+        // 左
+        (myfirstclick0 == this.sumarr[i][0] &&
+          myfirstclick1 - 1 == this.sumarr[i][1]) ||
+        // 右
+        (myfirstclick0 == this.sumarr[i][0] &&
+          myfirstclick1 + 1 == this.sumarr[i][1]) ||
+        // 左下
+        (myfirstclick0 + 1 == this.sumarr[i][0] &&
+          myfirstclick1 - 1 == this.sumarr[i][1]) ||
+        // 下
+        (myfirstclick0 + 1 == this.sumarr[i][0] &&
+          myfirstclick1 == this.sumarr[i][1]) ||
+        // 右下
+        (myfirstclick0 + 1 == this.sumarr[i][0] &&
+          myfirstclick1 + 1 == this.sumarr[i][1])
       ) {
-        // console.log("我改了");
         this.sumarr.splice(i, 1);
         this.x = parseInt(Math.random() * this.board); //转为整数
         this.y = parseInt(Math.random() * this.board);
@@ -610,7 +634,6 @@ class sweepmine {
     if (that.hadopenarr.length == 1) {
       //第一击
       that.myfirstclick = this.id.split("_");
-
       // 随机埋雷
       that.createmine();
       // 计算每一个格子周围的雷数
