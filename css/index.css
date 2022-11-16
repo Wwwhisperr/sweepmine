@@ -38,14 +38,18 @@ td div {
 
 .on::before{
     content: '🚩';
+    height: 30px;
+    width: 30px;
+    padding: 4.5px;
 }
 .on div{
     width: 0;
     height: 0;
 }
 .text {
-    width: 100px;
+    width: 120px;
     height: 50px;
+    /* margin-left: -10px; */
     line-height: 50px;
     background-color: #e5e5e5;
     text-align: center;
@@ -55,7 +59,7 @@ td div {
     /* margin: 0 auto; */
 }
 .level{
-    width: 300px;
+    width: 250px;
     height: 50px;
     background-color: #e5e5e5;
     line-height: 50px;
@@ -88,7 +92,7 @@ button {
     /* border: transparent; */
 }
 .timer {
-    width: 100px;
+    width: 90px;
     height: 50px;
     line-height: 50px;
     background-color: #e5e5e5;
